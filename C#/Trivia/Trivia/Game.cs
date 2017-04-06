@@ -9,12 +9,7 @@ namespace Trivia
         private readonly Dictionary<int, string> _categories = new Dictionary<int, string>() {{0, "Pop"}, {1, "Science"}, {2, "Sports"}, {3, "Rock"}};
 
         private readonly Players _players;
-
-        Questions popQuestions = new Questions("Pop");
-        Questions scienceQuestions = new Questions("Science");
-        Questions sportsQuestions = new Questions("Sport");
-        Questions rockQuestions = new Questions("Rock");
-     
+        QuestionsStack QS = new QuestionsStack();
 
         bool isGettingOutOfPenaltyBox;
 
@@ -22,19 +17,15 @@ namespace Trivia
         public Game(Players players)
         {
             _players = players;
-            for (var i = 0; i < 50; i++)
-            {
-                popQuestions.LesQuestions.Add("Pop Question " + i);
-                scienceQuestions.LesQuestions.Add(("Science Question " + i));
-                sportsQuestions.LesQuestions.Add(("Sports Question " + i));
-                rockQuestions.LesQuestions.Add(CreateRockQuestion(i));
-            }
+
+            QS.MesCategories.Add(new Questions("Pop"));
+            QS.MesCategories.Add(new Questions("Science"));
+            QS.MesCategories.Add(new Questions("Sport"));
+            QS.MesCategories.Add(new Questions("Rock"));
+
+            QS.GenerateQuestion();
         }
-        
-        public string CreateRockQuestion(int index)
-        {
-            return "Rock Question " + index;
-        }
+
 
         public void Roll(int roll)
         {
@@ -54,7 +45,7 @@ namespace Trivia
                             + "'s new location is "
                             + _players.Current.Place);
                     Console.WriteLine("The category is " + CurrentCategory());
-                    AskQuestion();
+                    QS.AskQuestion(CurrentCategory());
                 }
                 else
                 {
@@ -71,34 +62,11 @@ namespace Trivia
                         + "'s new location is "
                         + _players.Current.Place);
                 Console.WriteLine("The category is " + CurrentCategory());
-                AskQuestion();
+                QS.AskQuestion(CurrentCategory());
             }
 
         }
 
-        private void AskQuestion()
-        {
-            if (CurrentCategory() == "Pop")
-            {
-                Console.WriteLine(popQuestions.LesQuestions.First());
-                popQuestions.LesQuestions.RemoveAt(0);
-            }
-            if (CurrentCategory() == "Science")
-            {
-                Console.WriteLine(scienceQuestions.LesQuestions.First());
-                scienceQuestions.LesQuestions.RemoveAt(0);
-            }
-            if (CurrentCategory() == "Sports")
-            {
-                Console.WriteLine(sportsQuestions.LesQuestions.First());
-                sportsQuestions.LesQuestions.RemoveAt(0);
-            }
-            if (CurrentCategory() == "Rock")
-            {
-                Console.WriteLine(rockQuestions.LesQuestions.First());
-                rockQuestions.LesQuestions.RemoveAt(0);
-            }
-        }
 
 
         private string CurrentCategory()

@@ -18,6 +18,17 @@ namespace Trivia
             this.NameType = name;
         }
 
+        public void Generate(int index)
+        {
+            this.LesQuestions.Add(this.NameType + " Question " + index);
+        }
+
+
+        public void pickACardAndAskQuestion()
+        {
+            Console.WriteLine(this.LesQuestions.First());
+            this.LesQuestions.RemoveAt(0);
+        }
 
     }
 }
